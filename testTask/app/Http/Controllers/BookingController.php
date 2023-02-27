@@ -9,6 +9,12 @@ use Illuminate\Support\Carbon;
 
 class BookingController extends Controller {
     public function getRequestFreeCars(Request $request) {
+
+        $request->validate([
+            'time_start'=>'required',
+            'time_end'=>'required'
+        ]);
+
         $apiToken = $request->header('API_TOKEN');
         $user = User::query()->where('api_token', $apiToken)->first();
         if (!$user) return 'Incorrect api token';
@@ -24,6 +30,10 @@ class BookingController extends Controller {
 
         if (array_key_exists("brands_cars", $input))
             $query->whereIn('brand_car', $input['brands_cars']);
+
+//        if (!array_key_exists('time_start', $input)) return "Field time_start is required";
+//        if (!array_key_exists('time_end', $input)) return "Field time_end is required";
+        if (Carbon::parse($input['time_start'])->gte(Carbon::parse($input['time_end']))) return "Wrong data";
 
         return $this->getAvailableCars($query->get(), $input['time_start'], $input['time_end']);
     }
