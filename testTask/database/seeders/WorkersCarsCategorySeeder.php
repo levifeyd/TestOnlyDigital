@@ -2,11 +2,10 @@
 
 namespace Database\Seeders;
 
-use App\Models\Car;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
-class CarSeeder extends Seeder
+class WorkersCarsCategorySeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -15,10 +14,6 @@ class CarSeeder extends Seeder
      */
     public function run()
     {
-        $car = Car::create([
-            'brand_car'=>'Kia',
-            'comfort_category'=>1,
-            'driver_name'=>'Mark',
-        ]);
+        //
     }
 }

@@ -2,11 +2,11 @@
 
 namespace Database\Seeders;
 
-use App\Models\Car;
+use App\Models\Booking;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
-class CarSeeder extends Seeder
+class BookingSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -15,10 +15,9 @@ class CarSeeder extends Seeder
      */
     public function run()
     {
-        $car = Car::create([
-            'brand_car'=>'Kia',
-            'comfort_category'=>1,
-            'driver_name'=>'Mark',
+        $booking = Booking::create([
+            'time_start'=>'2023-02-27 12:22:18',
+            'time_end'=>'2023-02-27 14:18:18'
         ]);
     }
 }
