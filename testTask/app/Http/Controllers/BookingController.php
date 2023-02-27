@@ -9,33 +9,23 @@ use Illuminate\Support\Carbon;
 
 class BookingController extends Controller {
     public function getRequestFreeCars(Request $request) {
-
-        $request->validate([
-            'time_start'=>'required',
-            'time_end'=>'required'
-        ]);
-
         $apiToken = $request->header('API_TOKEN');
         $user = User::query()->where('api_token', $apiToken)->first();
         if (!$user) return 'Incorrect api token';
         $categoriesIds = $user->carsCategories()->toArray();
         $input = json_decode($request->getContent(), true);
 
-        if (!$input) return 'Incorrect request';
-        if (array_key_exists("categories_id", $input)) {
-            $categoriesIds = array_intersect($categoriesIds, $input["categories_id"]);
+        $error = $this->validation($input);
+        if (!$error) {
+            if (array_key_exists("categories_id", $input))
+                $categoriesIds = array_intersect($categoriesIds, $input["categories_id"]);
+            $query = Car::query()->select('id', 'brand_car', 'driver_name')
+                ->whereIn("comfort_category", $categoriesIds);
+            if (array_key_exists("brands_cars", $input)) $query->whereIn('brand_car', $input['brands_cars']);
+            return $this->getAvailableCars($query->get(), $input['time_start'], $input['time_end']);
+        } else {
+            return $error;
         }
-        $query = Car::query()->select('id', 'brand_car', 'driver_name')
-            ->whereIn("comfort_category", $categoriesIds);
-
-        if (array_key_exists("brands_cars", $input))
-            $query->whereIn('brand_car', $input['brands_cars']);
-
-//        if (!array_key_exists('time_start', $input)) return "Field time_start is required";
-//        if (!array_key_exists('time_end', $input)) return "Field time_end is required";
-        if (Carbon::parse($input['time_start'])->gte(Carbon::parse($input['time_end']))) return "Wrong data";
-
-        return $this->getAvailableCars($query->get(), $input['time_start'], $input['time_end']);
     }
     public function getAvailableCars($cars, $timeStart, $timeEnd) {
         $availableCarsArray = [];
@@ -55,5 +45,13 @@ class BookingController extends Controller {
             }
         }
         return $availableCarsArray;
+    }
+
+    public function validation($input) {
+        $result = 0;
+        if (!array_key_exists('time_start', $input)) $result = "Field time_start is required";
+        if (!array_key_exists('time_end', $input)) $result = "Field time_end is required";
+        if (!$result && Carbon::parse($input['time_start'])->gte(Carbon::parse($input['time_end']))) $result = "Wrong data";
+        return $result;
     }
 }
