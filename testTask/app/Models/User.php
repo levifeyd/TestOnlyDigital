@@ -43,6 +43,6 @@ class User extends Authenticatable
     ];
     public function carsCategories()
     {
-        return $this->hasMany(WorkersCarsCategory::class, 'worker_id')->pluck('cars_categories');
+        return $this->hasMany(WorkersCarsCategories::class, 'worker_id')->pluck('cars_categories');
     }
 }

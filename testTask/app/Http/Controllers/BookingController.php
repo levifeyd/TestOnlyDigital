@@ -18,8 +18,10 @@ class BookingController extends Controller {
         if (array_key_exists("categories_id", $input)) {
             $categoriesIds = array_intersect($categoriesIds, $input["categories_id"]);
         }
-//        $query = Car::query()->select('id', 'brand_car', 'driver_name')
-//            ->whereIn('comfort_category', $categoriesIds);
-        return $categoriesIds;
+        $query = Car::query()->select('id', 'brand_car', 'driver_name')
+            ->whereIn("comfort_category", $categoriesIds)->get();
+//        if (array_key_exists("brand_car", $input)) $query->whereIn("brand_car", $input["brand_car"]);
+
+        return $query;
     }
 }
