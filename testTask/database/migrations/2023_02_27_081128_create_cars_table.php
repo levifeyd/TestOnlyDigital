@@ -18,7 +18,6 @@ return new class extends Migration
             $table->string('brand_car');
             $table->integer('comfort_category');
             $table->string('driver_name');
-            $table->timestamps();
         });
     }
 

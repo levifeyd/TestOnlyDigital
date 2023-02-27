@@ -15,15 +15,21 @@ class BookingSeeder extends Seeder
      */
     public function run()
     {
-//        $booking = Booking::create([
-//            'car_id'=>'1',
-//            'worker_id'=>'1',
-//            'time_start'=>'2023-02-27 12:22:18',
-//            'time_end'=>'2023-02-27 14:18:18',
-//        ]);
-        $booking = Booking::create([
-            'car_id'=>'3',
+        $booking1 = Booking::create([
+            'car_id'=>'1',
+            'worker_id'=>'1',
+            'time_start'=>'2023-02-27 10:13:18',
+            'time_end'=>'2023-02-27 16:13:18',
+        ]);
+        $booking2 = Booking::create([
+            'car_id'=>'1',
             'worker_id'=>'2',
+            'time_start'=>'2023-02-27 18:22:18',
+            'time_end'=>'2023-02-27 19:18:18',
+        ]);
+        $booking3 = Booking::create([
+            'car_id'=>'3',
+            'worker_id'=>'1',
             'time_start'=>'2023-02-27 13:22:18',
             'time_end'=>'2023-02-27 14:18:18',
         ]);
