@@ -16,6 +16,8 @@ class BookingSeeder extends Seeder
     public function run()
     {
         $booking = Booking::create([
+            'car_id'=>'1',
+            'worker_id'=>'1',
             'time_start'=>'2023-02-27 12:22:18',
             'time_end'=>'2023-02-27 14:18:18'
         ]);
