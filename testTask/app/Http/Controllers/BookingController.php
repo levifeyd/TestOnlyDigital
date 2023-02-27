@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Car;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 
 class BookingController extends Controller {
     public function getRequestFreeCars(Request $request) {
@@ -19,9 +20,30 @@ class BookingController extends Controller {
             $categoriesIds = array_intersect($categoriesIds, $input["categories_id"]);
         }
         $query = Car::query()->select('id', 'brand_car', 'driver_name')
-            ->whereIn("comfort_category", $categoriesIds)->get();
-//        if (array_key_exists("brand_car", $input)) $query->whereIn("brand_car", $input["brand_car"]);
+            ->whereIn("comfort_category", $categoriesIds);
 
-        return $query;
+        if (array_key_exists("brands_cars", $input))
+            $query->whereIn('brand_car', $input['brands_cars']);
+
+        return $this->getAvailableCars($query->get(), $input['time_start'], $input['time_end']);
+    }
+    public function getAvailableCars($cars, $timeStart, $timeEnd) {
+        $availableCarsArray = [];
+        $i = 0;
+        foreach ($cars as $car) {
+            $availableBooking = true;
+            $bookings = $car->getBookings();
+            foreach ($bookings as $booking) {
+                if (Carbon::parse($timeStart)->lte(Carbon::parse($booking->time_end))
+                    && Carbon::parse($timeEnd)->gte(Carbon::parse($booking->time_start))) {
+                    $availableBooking = false;
+                }
+            }
+            if ($availableBooking) {
+                $availableCarsArray[$i] = $car;
+                $i++;
+            }
+        }
+        return $availableCarsArray;
     }
 }
