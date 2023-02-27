@@ -13,4 +13,5 @@ class WorkersCarsCategory extends Model {
         'worker_id',
         'cars_categories'
     ];
+    public $timestamps = false;
 }

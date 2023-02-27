@@ -12,5 +12,6 @@ class BookingController extends Controller
         $user = User::query()->where('api_token', $apiToken)->first();
         if (!$user) return 'Incorrect api token';
 
+        return $apiToken;
     }
 }
